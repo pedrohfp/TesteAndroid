@@ -1,7 +1,7 @@
 apply plugin: 'com.android.library'
 apply plugin: 'kotlin-android'
 apply from: "$rootDir/dependency/jacoco.gradle"
-
+apply from: "$rootDir/dependency/linters.gradle"
 
 android {
     compileSdkVersion 28
