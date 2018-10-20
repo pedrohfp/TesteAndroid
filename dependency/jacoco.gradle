@@ -1,0 +1,53 @@
+apply plugin: 'jacoco'
+
+jacoco {
+    toolVersion = jacoco_version
+}
+
+task jacocoTestReport(type: JacocoReport) {
+    group 'Reporting'
+    description 'Run tests and generate coverage report for instrumented and jvm testes'
+    dependsOn 'testDebugUnitTest'
+    dependsOn 'createDebugCoverageReport'
+
+    reports {
+        xml.enabled = true
+        html.enabled = true
+    }
+
+    def fileFilter = [
+            '**/R.class',
+            '**/R$*.class',
+            '**/BuildConfig.*',
+            '**/Manifest*.*',
+            '**/*Test*.*',
+            'android/**/*.*',
+            '**/*BR*.*'
+    ]
+
+    def javaTree = fileTree(
+            dir: "${buildDir}/intermediates/classes/meta/debug",
+            excludes: fileFilter)
+
+    def kotlinTree = fileTree(dir: "${buildDir}/tmp/kotlin-classes/metaDebug", excludes: fileFilter)
+
+    classDirectories = files([javaTree], [kotlinTree])
+    def coverageSourceDirs = [
+            "src/main/java"
+    ]
+    additionalSourceDirs = files(coverageSourceDirs)
+    sourceDirectories = files(coverageSourceDirs)
+
+    executionData = fileTree(dir: "$buildDir", includes: [
+            "jacoco/*.exec",
+            "outputs/code-coverage/connected/flavors/**/*.ec",
+            "outputs/code-coverage/connected/**.ec",
+            "tmp/tests/*.exec",
+            "tmp/tests/*.ec",
+    ])
+
+    doLast {
+        println "Jacoco report has been generated to file://${reports.html.destination}/index.html"
+    }
+}
+
