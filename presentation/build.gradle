@@ -1,0 +1,52 @@
+apply plugin: 'com.android.application'
+apply plugin: 'kotlin-android'
+apply plugin: 'kotlin-android-extensions'
+apply from: "$rootDir/dependency/jacoco.gradle"
+apply from: "$rootDir/dependency/linters.gradle"
+
+android {
+    compileSdkVersion 28
+    defaultConfig {
+        applicationId "br.com.example.investmentapp"
+        minSdkVersion 16
+        targetSdkVersion 28
+        versionCode 1
+        versionName "1.0"
+        testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
+    }
+    buildTypes {
+        debug {
+            testCoverageEnabled true
+        }
+        release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+        }
+    }
+    testOptions {
+        animationsDisabled = true
+        unitTests.all {
+            jacoco {
+                includeNoLocationClasses = true
+            }
+            unitTests {
+                includeAndroidResources = true
+            }
+        }
+    }
+}
+
+extensions.versions = [
+        support  : '28.0.0',
+        constraintLayout : '1.1.3'
+]
+
+dependencies {
+    implementation fileTree(dir: 'libs', include: ['*.jar'])
+    implementation"org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
+    implementation "com.android.support:appcompat-v7:$versions.support"
+    implementation "com.android.support.constraint:constraint-layout:$versions.constraintLayout"
+
+    testImplementation unitTest.values()
+    androidTestImplementation instrumentedTest.values()
+}
