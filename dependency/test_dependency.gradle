@@ -1,0 +1,10 @@
+ext {
+    unitTest = [
+            junit    : "junit:junit:$testVersions.junit"
+    ]
+
+    instrumentedTest = [
+            runner   : "com.android.support.test:runner:$testVersions.runner",
+            espresso : "com.android.support.test.espresso:espresso-core:$testVersions.espresso"
+    ]
+}
