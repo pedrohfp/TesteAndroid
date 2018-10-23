@@ -28,11 +28,21 @@ android {
 
 }
 
+extensions.versions = [
+        retrofit : '2.4.0',
+        okhttp   : '3.11.0',
+        arch     : '1.1.1'
+]
+
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
-    implementation"org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
+    implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
+    implementation "com.squareup.retrofit2:retrofit:$versions.retrofit"
+    implementation "com.squareup.okhttp3:logging-interceptor:$versions.okhttp"
+
+    api "com.squareup.retrofit2:converter-gson:$versions.retrofit"
+    api "android.arch.lifecycle:extensions:$versions.arch"
 
     testImplementation unitTest.values()
     androidTestImplementation instrumentedTest.values()
-
 }

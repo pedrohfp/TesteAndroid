@@ -10,9 +10,11 @@ android:
         # The BuildTools version used by your project
         - build-tools-26.0.2
         - build-tools-27.0.1
-        - build-tools 27.0.2
+        - build-tools-27.0.2
+        - build-tools-28.0.3
 
         # The SDK version used to compile your project
+        - android-28
         - android-27
         - android-26
         - android-22
@@ -34,22 +36,14 @@ android:
           - 'google-gdk-license-.+'
 
 before_script:
-    - ./gradlew clean
-    - echo no | android create avd --force -n test -t android-26 --abi armeabi-v7a
+    - echo no | android create avd --force -n test -t android-22 --abi armeabi-v7a
     - emulator -avd test -no-audio -no-window &
     - android-wait-for-emulator
     - adb shell input keyevent 82 &
 
-jobs:
-    include:
-       - stage: Linters
-       - script: ./gradlew ktlint
-       - stage: Presentation
-       - script: ./gradlew presentation:jacocoTestReport
-       - stage: Domain
-       - script: ./gradlew domain:jacocoTestReport
-       - stage: Data
-       - script: ./gradlew data:jacocoTestReport
+script:
+    - ./gradlew ktlint
+    - ./gradlew jacocoTestReport
 
 before_cache:
     - rm -f  $HOME/.gradle/caches/modules-2/modules-2.lock
@@ -59,4 +53,4 @@ cache:
     directories:
     - $HOME/.gradle/caches/
     - $HOME/.gradle/wrapper/
-- $HOME/.android/build-cache
+    - $HOME/.android/build-cache
